@@ -1,0 +1,422 @@
+[
+  {
+    "id": "Q1_BN",
+    "name": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "full_name": "Phường Bến Nghé, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_BT",
+    "name": "Phường Bến Thành",
+    "district": "Quận 1",
+    "full_name": "Phường Bến Thành, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_CK",
+    "name": "Phường Cầu Kho",
+    "district": "Quận 1",
+    "full_name": "Phường Cầu Kho, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_COL",
+    "name": "Phường Cầu Ông Lãnh",
+    "district": "Quận 1",
+    "full_name": "Phường Cầu Ông Lãnh, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_CG",
+    "name": "Phường Cô Giang",
+    "district": "Quận 1",
+    "full_name": "Phường Cô Giang, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_DK",
+    "name": "Phường Đa Kao",
+    "district": "Quận 1",
+    "full_name": "Phường Đa Kao, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_NCT",
+    "name": "Phường Nguyễn Cư Trinh",
+    "district": "Quận 1",
+    "full_name": "Phường Nguyễn Cư Trinh, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_NTB",
+    "name": "Phường Nguyễn Thái Bình",
+    "district": "Quận 1",
+    "full_name": "Phường Nguyễn Thái Bình, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_PNL",
+    "name": "Phường Phạm Ngũ Lão",
+    "district": "Quận 1",
+    "full_name": "Phường Phạm Ngũ Lão, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q1_TD",
+    "name": "Phường Tân Định",
+    "district": "Quận 1",
+    "full_name": "Phường Tân Định, Quận 1",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P1",
+    "name": "Phường 1",
+    "district": "Quận 3",
+    "full_name": "Phường 1, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P2",
+    "name": "Phường 2",
+    "district": "Quận 3",
+    "full_name": "Phường 2, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P3",
+    "name": "Phường 3",
+    "district": "Quận 3",
+    "full_name": "Phường 3, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P4",
+    "name": "Phường 4",
+    "district": "Quận 3",
+    "full_name": "Phường 4, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P5",
+    "name": "Phường 5",
+    "district": "Quận 3",
+    "full_name": "Phường 5, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P9",
+    "name": "Phường 9",
+    "district": "Quận 3",
+    "full_name": "Phường 9, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P11",
+    "name": "Phường 11",
+    "district": "Quận 3",
+    "full_name": "Phường 11, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P12",
+    "name": "Phường 12",
+    "district": "Quận 3",
+    "full_name": "Phường 12, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_P14",
+    "name": "Phường 14",
+    "district": "Quận 3",
+    "full_name": "Phường 14, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "Q3_VTS",
+    "name": "Phường Võ Thị Sáu",
+    "district": "Quận 3",
+    "full_name": "Phường Võ Thị Sáu, Quận 3",
+    "in_lez": true
+  },
+  {
+    "id": "TD_TT",
+    "name": "Phường Thủ Thiêm",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường Thủ Thiêm, TP Thủ Đức",
+    "in_lez": true
+  },
+  {
+    "id": "TD_AK",
+    "name": "Phường An Khánh",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường An Khánh, TP Thủ Đức",
+    "in_lez": true
+  },
+  {
+    "id": "TD_AL",
+    "name": "Phường An Lợi Đông",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường An Lợi Đông, TP Thủ Đức",
+    "in_lez": true
+  },
+  {
+    "id": "TD_TD",
+    "name": "Phường Thảo Điền",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường Thảo Điền, TP Thủ Đức",
+    "in_lez": false
+  },
+  {
+    "id": "TD_AP",
+    "name": "Phường An Phú",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường An Phú, TP Thủ Đức",
+    "in_lez": false
+  },
+  {
+    "id": "TD_HP",
+    "name": "Phường Hiệp Phú",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường Hiệp Phú, TP Thủ Đức",
+    "in_lez": false
+  },
+  {
+    "id": "TD_LT",
+    "name": "Phường Linh Trung",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường Linh Trung, TP Thủ Đức",
+    "in_lez": false
+  },
+  {
+    "id": "TD_TC",
+    "name": "Phường Linh Chiểu",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường Linh Chiểu, TP Thủ Đức",
+    "in_lez": false
+  },
+  {
+    "id": "TD_TP",
+    "name": "Phường Tăng Nhơn Phú A",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường Tăng Nhơn Phú A, TP Thủ Đức",
+    "in_lez": false
+  },
+  {
+    "id": "TD_BTD",
+    "name": "Phường Bình Trưng Đông",
+    "district": "TP Thủ Đức",
+    "full_name": "Phường Bình Trưng Đông, TP Thủ Đức",
+    "in_lez": false
+  },
+  {
+    "id": "BT_P1",
+    "name": "Phường 1",
+    "district": "Quận Bình Thạnh",
+    "full_name": "Phường 1, Quận Bình Thạnh",
+    "in_lez": false
+  },
+  {
+    "id": "BT_P2",
+    "name": "Phường 2",
+    "district": "Quận Bình Thạnh",
+    "full_name": "Phường 2, Quận Bình Thạnh",
+    "in_lez": false
+  },
+  {
+    "id": "BT_P15",
+    "name": "Phường 15",
+    "district": "Quận Bình Thạnh",
+    "full_name": "Phường 15, Quận Bình Thạnh",
+    "in_lez": false
+  },
+  {
+    "id": "BT_P19",
+    "name": "Phường 19",
+    "district": "Quận Bình Thạnh",
+    "full_name": "Phường 19, Quận Bình Thạnh",
+    "in_lez": false
+  },
+  {
+    "id": "BT_P22",
+    "name": "Phường 22",
+    "district": "Quận Bình Thạnh",
+    "full_name": "Phường 22, Quận Bình Thạnh",
+    "in_lez": false
+  },
+  {
+    "id": "BT_P25",
+    "name": "Phường 25",
+    "district": "Quận Bình Thạnh",
+    "full_name": "Phường 25, Quận Bình Thạnh",
+    "in_lez": false
+  },
+  {
+    "id": "PN_P1",
+    "name": "Phường 1",
+    "district": "Quận Phú Nhuận",
+    "full_name": "Phường 1, Quận Phú Nhuận",
+    "in_lez": false
+  },
+  {
+    "id": "PN_P2",
+    "name": "Phường 2",
+    "district": "Quận Phú Nhuận",
+    "full_name": "Phường 2, Quận Phú Nhuận",
+    "in_lez": false
+  },
+  {
+    "id": "PN_P9",
+    "name": "Phường 9",
+    "district": "Quận Phú Nhuận",
+    "full_name": "Phường 9, Quận Phú Nhuận",
+    "in_lez": false
+  },
+  {
+    "id": "Q4_P1",
+    "name": "Phường 1",
+    "district": "Quận 4",
+    "full_name": "Phường 1, Quận 4",
+    "in_lez": false
+  },
+  {
+    "id": "Q4_P6",
+    "name": "Phường 6",
+    "district": "Quận 4",
+    "full_name": "Phường 6, Quận 4",
+    "in_lez": false
+  },
+  {
+    "id": "Q4_P13",
+    "name": "Phường 13",
+    "district": "Quận 4",
+    "full_name": "Phường 13, Quận 4",
+    "in_lez": false
+  },
+  {
+    "id": "Q5_P1",
+    "name": "Phường 1",
+    "district": "Quận 5",
+    "full_name": "Phường 1, Quận 5",
+    "in_lez": false
+  },
+  {
+    "id": "Q5_P5",
+    "name": "Phường 5",
+    "district": "Quận 5",
+    "full_name": "Phường 5, Quận 5",
+    "in_lez": false
+  },
+  {
+    "id": "Q5_P11",
+    "name": "Phường 11",
+    "district": "Quận 5",
+    "full_name": "Phường 11, Quận 5",
+    "in_lez": false
+  },
+  {
+    "id": "Q7_TM",
+    "name": "Phường Tân Mỹ",
+    "district": "Quận 7",
+    "full_name": "Phường Tân Mỹ, Quận 7",
+    "in_lez": false
+  },
+  {
+    "id": "Q7_TP",
+    "name": "Phường Tân Phú",
+    "district": "Quận 7",
+    "full_name": "Phường Tân Phú, Quận 7",
+    "in_lez": false
+  },
+  {
+    "id": "Q7_TT",
+    "name": "Phường Tân Thuận Đông",
+    "district": "Quận 7",
+    "full_name": "Phường Tân Thuận Đông, Quận 7",
+    "in_lez": false
+  },
+  {
+    "id": "Q10_P1",
+    "name": "Phường 1",
+    "district": "Quận 10",
+    "full_name": "Phường 1, Quận 10",
+    "in_lez": false
+  },
+  {
+    "id": "Q10_P12",
+    "name": "Phường 12",
+    "district": "Quận 10",
+    "full_name": "Phường 12, Quận 10",
+    "in_lez": false
+  },
+  {
+    "id": "TB_P2",
+    "name": "Phường 2",
+    "district": "Quận Tân Bình",
+    "full_name": "Phường 2, Quận Tân Bình",
+    "in_lez": false
+  },
+  {
+    "id": "TB_P13",
+    "name": "Phường 13",
+    "district": "Quận Tân Bình",
+    "full_name": "Phường 13, Quận Tân Bình",
+    "in_lez": false
+  },
+  {
+    "id": "GV_P1",
+    "name": "Phường 1",
+    "district": "Quận Gò Vấp",
+    "full_name": "Phường 1, Quận Gò Vấp",
+    "in_lez": false
+  },
+  {
+    "id": "GV_P5",
+    "name": "Phường 5",
+    "district": "Quận Gò Vấp",
+    "full_name": "Phường 5, Quận Gò Vấp",
+    "in_lez": false
+  },
+  {
+    "id": "TP_TS",
+    "name": "Phường Tây Thạnh",
+    "district": "Quận Tân Phú",
+    "full_name": "Phường Tây Thạnh, Quận Tân Phú",
+    "in_lez": false
+  },
+  {
+    "id": "BT_BHH",
+    "name": "Phường Bình Hưng Hòa",
+    "district": "Quận Bình Tân",
+    "full_name": "Phường Bình Hưng Hòa, Quận Bình Tân",
+    "in_lez": false
+  },
+  {
+    "id": "Q12_TH",
+    "name": "Phường Tân Hưng Thuận",
+    "district": "Quận 12",
+    "full_name": "Phường Tân Hưng Thuận, Quận 12",
+    "in_lez": false
+  },
+  {
+    "id": "BC_TT",
+    "name": "Thị trấn Tân Túc",
+    "district": "Huyện Bình Chánh",
+    "full_name": "Thị trấn Tân Túc, Huyện Bình Chánh",
+    "in_lez": false
+  },
+  {
+    "id": "HM_TT",
+    "name": "Thị trấn Hóc Môn",
+    "district": "Huyện Hóc Môn",
+    "full_name": "Thị trấn Hóc Môn, Huyện Hóc Môn",
+    "in_lez": false
+  },
+  {
+    "id": "NB_PK",
+    "name": "Xã Phước Kiển",
+    "district": "Huyện Nhà Bè",
+    "full_name": "Xã Phước Kiển, Huyện Nhà Bè",
+    "in_lez": false
+  }
+]
