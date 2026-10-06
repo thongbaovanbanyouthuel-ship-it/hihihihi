@@ -30,3 +30,11 @@ Thumbs.db
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Reference datasets & project samples
+reference/
+legacy_ev_system/
+
+# Firebase Service Account Credentials
+*firebase-adminsdk*.json
+serviceAccountKey.json

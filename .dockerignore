@@ -1,0 +1,11 @@
+node_modules
+.next
+reference
+reference/
+.git
+.env
+.env.local
+backups
+data/simulated
+*firebase-adminsdk*.json
+serviceAccountKey.json

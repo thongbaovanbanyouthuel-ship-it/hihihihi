@@ -16,7 +16,7 @@ Hệ thống gồm 3 phân hệ tích hợp chặt chẽ:
 ## 2. Kiến trúc Kỹ thuật & Thư mục Dự án
 
 ```
-ev_survey_system/
+NCKHcode/
 ├── analysis/                     # Các kịch bản R độc lập & Plumber API
 │   ├── 00_common.R               # Cấu hình chung, nạp gói và hàm tiện ích
 │   ├── 01_data_quality.R         # 7.1 Thống kê mô tả, Cronbach's Alpha, Fatigue Check
@@ -29,14 +29,17 @@ ev_survey_system/
 │   ├── run_server.R              # Khởi chạy máy chủ API R
 │   ├── simulate_data.py          # Sinh dữ liệu giả lập 600 người trả lời
 │   └── parameter_recovery.R      # Kịch bản kiểm thử khôi phục tham số trong R
-├── data/                         # CSDL và file thiết kế thực nghiệm
+├── data/                         # File thiết kế thực nghiệm và dữ liệu mẫu
 │   ├── hcmc_wards.json           # Danh sách phường/xã TP.HCM và cờ in_lez
 │   ├── dce_design_blocks.csv     # 24 thẻ lựa chọn DCE (3 khối x 8 thẻ)
 │   ├── flexible_attributes_bank.json # Ngân hàng 6 thuộc tính linh hoạt
-│   ├── survey_responses_wide.csv # Dữ liệu khảo sát dạng rộng (600 dòng)
-│   ├── survey_data_apollo_long.csv # Dữ liệu dạng dài cho Apollo DCE (4.800 dòng)
-│   ├── survey_data_bws_long.csv  # Dữ liệu dạng dài cho BWS (7.800 dòng)
-│   └── lucky_draw_entries.json   # Bảng email quay thưởng độc lập (KHÔNG PII)
+│   └── simulated/                # Dữ liệu mô phỏng độc lập (hậu tố _SIMULATED)
+│       ├── survey_responses_wide_SIMULATED.csv
+│       ├── survey_data_apollo_long_SIMULATED.csv
+│       └── survey_data_bws_long_SIMULATED.csv
+├── scripts/                      # Script sao lưu tự động CSDL PostgreSQL
+│   ├── backup_daily.sh           # Script pg_dump hằng ngày cho Linux / Docker
+│   └── backup_daily.ps1          # Script pg_dump hằng ngày cho Windows
 ├── src/                          # Mã nguồn Frontend & API routes (Next.js App Router)
 │   ├── app/
 │   │   ├── page.tsx              # Trang giới thiệu / Cổng điều hướng
@@ -47,13 +50,14 @@ ev_survey_system/
 │   └── lib/
 │       ├── surveyData.ts         # Hằng số câu hỏi, 13 tập BWS BIBD, thang đo Likert
 │       ├── qualityControl.ts     # Gắn cờ tự động, phân nhóm cân bằng, kiểm tra quota
-│       ├── storage.ts            # Quản lý lưu trữ file, nhật ký thao tác audit log
-│       └── analysisEngine.ts     # Cầu nối R Plumber API và Local Analytical Engine
+│       ├── surveyLogic.ts        # Single source of truth cho logic, mã hóa, xuất file
+│       ├── db.ts                 # Kết nối PostgreSQL, di trú bảng và giao dịch khóa hàng
+│       └── analysisEngine.ts     # Cầu nối R Plumber API (Apollo & lavaan - không dùng fallback)
 ├── tests/                        # Bộ kiểm thử bắt buộc (Mục 9)
-│   ├── test_bibd.py              # Kiểm thử tính cân bằng toán học BIBD v=13, k=4, r=4, λ=1
-│   ├── test_randomization.py     # Mô phỏng 1.000 người trả lời kiểm tra cân bằng A/B, K1-K3
-│   ├── test_parameter_recovery.py# Kiểm thử khôi phục tham số (Fisher Scoring MLE)
-│   ├── test_bws_parity.py        # Kiểm thử đối chiếu điểm đếm BWS Web vs R
+│   ├── test_survey_logic.ts      # Kiểm thử TypeScript (BIBD, A/B, K1-K3, sàng lọc, cờ kiểm soát)
+│   ├── test_bws_parity.R         # Kiểm thử đối chiếu điểm đếm BWS Web vs R (support.BWS)
+│   ├── test_parameter_recovery.R # Kiểm thử khôi phục tham số R (Apollo MNL & HCM 2 biến tiềm ẩn)
+│   ├── run_r_tests.ts            # Điều phối chạy kiểm thử R qua Rscript
 │   └── recovery_report.md        # Báo cáo kết quả kiểm thử khôi phục tham số
 ├── CODEBOOK.md                   # Từ điển biến đầy đủ
 ├── CREDITS.md                    # Bản quyền hình ảnh, phông chữ, biểu tượng
@@ -109,7 +113,7 @@ Hệ thống đóng gói toàn bộ Frontend, Backend, PostgreSQL và R Engine t
 
 ```bash
 # 1. Di chuyển vào thư mục dự án
-cd ev_survey_system
+cd NCKHcode
 
 # 2. Khởi tạo file môi trường
 cp .env.example .env
@@ -121,7 +125,7 @@ docker compose up -d --build
 docker compose ps
 ```
 - **Trang Khảo sát / Người dùng:** `http://localhost:3000`
-- **Trang Quản trị:** `http://localhost:3000/admin` (Tài khoản: `admin` / Mật khẩu: `AdminNCKH2026@Secure!`)
+- **Trang Quản trị:** `http://localhost:3000/admin` (Tài khoản quản trị viên: cấu hình bảo mật qua file `.env`)
 - **Bảng Phân tích:** `http://localhost:3000/analysis`
 - **R Plumber API Docs:** `http://localhost:8000/__docs__/`
 
@@ -141,35 +145,57 @@ npm run dev
 npm run build
 npm start
 ```
-Ứng dụng sẽ hoạt động tại `http://localhost:3000`. Khi R Plumber chưa bật ngoài Docker, ứng dụng tự động kích hoạt **Local Analytical Fallback Engine** độ chính xác cao để toàn bộ biểu đồ, bảng hệ số và chẩn đoán mô hình hiển thị mượt mà ngay lập tức.
+Ứng dụng sẽ hoạt động tại `http://localhost:3000`. Khi máy chủ R Plumber chưa chạy, trang phân tích (`/analysis`) sẽ hiển thị thông báo "Máy phân tích R chưa sẵn sàng" và không hiển thị bất kỳ số liệu hay biểu đồ nào, đảm bảo 100% tính đúng đắn khoa học (bỏ hoàn toàn bộ ước lượng nội bộ fallback, chỉ ước lượng bằng Apollo trong R).
 
 ---
 
 ## 5. Kết quả Kiểm thử Nghiệm thu Bắt buộc (Mục 9)
 
-Chạy lệnh `npm test` để kiểm tra toàn bộ 4 bộ test toán học:
+Chạy lệnh `npm test` để kiểm tra toàn bộ các bộ kiểm thử khoa học:
 
-1. **Kiểm thử thiết kế BIBD (`tests/test_bibd.py`):**
-   - 13 tập sinh từ tập sai phân $\{0, 1, 3, 9\} \pmod{13}$.
-   - Khớp 100% đặc tả C1–C13 trong Mục 5.5.
-   - Mỗi rào cản xuất hiện đúng $r=4$ lần; tất cả 78 cặp rào cản xuất hiện cùng nhau đúng $\lambda=1$ lần (**ĐẠT TOÀN DIỆN**).
-2. **Kiểm thử mô phỏng phân nhóm ngẫu nhiên (`tests/test_randomization.py`):**
-   - Mô phỏng 1.000 người trả lời ảo.
-   - Tỷ lệ phiên bản A/B: 50.0% / 50.0% (độ lệch $\le \pm 1\%$).
-   - Tỷ lệ khối DCE K1 / K2 / K3: 33.4% / 33.3% / 33.3% (độ lệch $\le \pm 0.1\%$).
-3. **Kiểm thử Khôi phục Tham số DCE & Apollo (`tests/test_parameter_recovery.py`):**
-   - Mô phỏng 600 đối tượng $\times$ 8 thẻ lựa chọn = 4.800 quan sát DCE theo đúng cấu trúc đề tài.
-   - Ước lượng Maximum Likelihood / Fisher Scoring.
-   - Toàn bộ tham số $\beta_{\text{price}}$, $\beta_{\text{solar}}$, $\beta_{\text{recycle}}$, $\text{ASC}$, $\beta_{\text{fee}}$, $\theta_O$ đều được khôi phục nằm trong khoảng tin cậy 95%.
-   - WTP Tái chế 100% thật: **+2.50 triệu VNĐ** → Ước lượng thu hồi: **+2.35 triệu VNĐ** (CI: `[1.264, 3.436]`).
-   - $\theta_O = +0.344 > 0$ có ý nghĩa thống kê ($p < 0.001$).
+1. **Kiểm thử logic khảo sát TypeScript (`tests/test_survey_logic.ts` qua `npx tsx`):**
+   - Thiết kế BIBD: 13 tập sinh từ tập sai phân $\{0, 1, 3, 9\} \pmod{13}$. Mỗi rào cản xuất hiện đúng $r=4$ lần; 78 cặp rào cản cùng xuất hiện đúng $\lambda=1$ lần (**ĐẠT TOÀN DIỆN**).
+   - Mô phỏng 1.000 người trả lời ảo: Tỷ lệ Order A/B cân bằng 50.0% / 50.0% ($\le \pm 1\%$), khối DCE K1 / K2 / K3 cân bằng 33.4% / 33.3% / 33.3% ($\le \pm 0.1\%$).
+   - Kiểm tra logic sàng lọc S1–S7: Các tình huống loại trừ và hợp lệ hoạt động chính xác theo quy chuẩn.
+   - Gắn cờ kiểm soát chất lượng dữ liệu: Đạt độ chính xác 100% cho speeder, straightliner, duplicate, failed attention check, v.v.
+
+2. **Kiểm thử tính tương đương điểm đếm BWS (`tests/test_bws_parity.R`):**
+   - Chạy trực tiếp `Rscript` đối chiếu điểm đếm BWS Web với hàm toán học trong gói `support.BWS` của R, đạt độ chính xác tương đương 100%.
+
+3. **Kiểm thử Khôi phục Tham số Apollo & HCM (`tests/test_parameter_recovery.R`):**
+   - Sử dụng chính mã nguồn Apollo R sẽ dùng cho dữ liệu thực để ước lượng trên dữ liệu mô phỏng đã biết tham số gốc.
+   - Bao gồm mô hình MNL và Hybrid Choice Model (HCM) với 2 biến tiềm ẩn ($\theta_O, \phi_O$).
+   - Toàn bộ tham số $\beta_{\text{price}}$, $\beta_{\text{solar}}$, $\beta_{\text{recycle}}$, $\text{ASC}$, $\beta_{\text{fee}}$, $\theta_O$, $\phi_O$ đều được khôi phục nằm trong khoảng tin cậy 95%.
    - Báo cáo chi tiết được lưu tại `tests/recovery_report.md`.
-4. **Kiểm thử tính tương đương điểm đếm BWS (`tests/test_bws_parity.py`):**
-   - Công thức tính điểm đếm trên Web engine khớp 100% với hàm toán học trong gói R `support.BWS`.
 
 ---
 
-## 6. Cam kết Đạo đức Nghiên cứu & Tuân thủ Pháp lý
-- **Không thu thập dữ liệu định danh (PII):** Hệ thống không chứa bất kỳ trường dữ liệu nào về Họ tên, Số CMND/CCCD, Số điện thoại trong bảng khảo sát.
-- **Tách rời thông tin quay thưởng quà tặng:** Địa chỉ email rút thăm quà tặng được thu thập ở một form riêng sau khi đã gửi phiếu, lưu trữ vào file `lucky_draw_entries.json` hoàn toàn độc lập, không có foreign key hay khóa định danh nào liên kết với câu trả lời.
-- **Tuân thủ Nghị định 13/2023/NĐ-CP** về Bảo vệ dữ liệu cá nhân trong hoạt động nghiên cứu khoa học học thuật.
+## 6. Cam kết Đạo đức Nghiên cứu & Bảo vệ Dữ liệu Cá nhân
+- **Khảo sát hoàn toàn ẩn danh:** Bảng hỏi khảo sát không thu thập bất kỳ trường định danh nào (không hỏi Họ tên, Số CMND/CCCD, Số điện thoại, Địa chỉ cụ thể, Địa chỉ IP).
+- **Quy chế bảo vệ Dữ liệu Cá nhân cho Email rút thăm:** Địa chỉ email rút thăm quà tặng là dữ liệu cá nhân theo quy định pháp luật. Do đó, hệ thống lưu trữ email trong bảng CSDL `lucky_draw` tách biệt hoàn toàn, không có khóa ngoại hay trường liên kết với dữ liệu câu trả lời khảo sát. Chỉ quản trị viên mới có quyền xem danh sách này phục vụ trao giải, và bảng dữ liệu được trang bị tính năng xóa toàn bộ vĩnh viễn ngay sau khi hoàn tất trao quà.
+- **Căn cứ pháp lý:** Tuân thủ đầy đủ **Nghị định số 13/2023/NĐ-CP ngày 17/04/2023 của Chính phủ về bảo vệ dữ liệu cá nhân**.
+
+---
+
+## 7. Quy trình Sao lưu Cơ sở Dữ liệu Hằng ngày (pg_dump)
+
+Hệ thống cung cấp script sao lưu tự động cho CSDL PostgreSQL tại `scripts/backup_daily.sh` (Linux/Docker) và `scripts/backup_daily.ps1` (Windows):
+
+### Thực thi sao lưu thủ công
+- Môi trường Linux / Docker:
+  ```bash
+  bash scripts/backup_daily.sh
+  ```
+- Môi trường Windows PowerShell:
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File scripts/backup_daily.ps1
+  ```
+
+### Thiết lập lịch sao lưu tự động hằng ngày (Cron job)
+Cấu hình cron job chạy vào lúc 02:00 sáng mỗi ngày:
+```bash
+crontab -e
+# Thêm dòng sau:
+0 2 * * * /app/scripts/backup_daily.sh >> /var/log/ev_db_backup.log 2>&1
+```
+Bản sao lưu sẽ được xuất bằng `pg_dump`, nén `gzip` và lưu trữ tại thư mục `backups/`. Kịch bản tự động dọn dẹp các tệp sao lưu cũ hơn 30 ngày để tối ưu dung lượng lưu trữ.

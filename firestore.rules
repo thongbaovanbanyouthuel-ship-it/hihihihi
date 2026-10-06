@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper kiểm tra quyền Admin
+    // Thay thế <ADMIN_UID> bằng UID thực tế của user nckh2627@nckh-admin.app lấy từ Firebase Console
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.uid == "<ADMIN_UID>" || 
+        request.auth.token.email.matches('.*@nckh-admin[.]app$')
+      );
+    }
+
+    // 1. Quản lý dự án (projects)
+    match /projects/{projectId} {
+      allow read, write: if isAdmin();
+
+      // Khảo sát con (surveys)
+      match /surveys/{surveyId} {
+        allow read, write: if isAdmin();
+
+        // Cho phép công chúng tăng bộ đếm responseCount đúng 1 đơn vị khi nộp bài
+        allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['responseCount', 'updatedAt'])
+                      && request.resource.data.responseCount == resource.data.responseCount + 1;
+
+        // Phân tích con (analyses)
+        match /analyses/{analysisId} {
+          allow read, write: if isAdmin();
+        }
+
+        // Phản hồi khảo sát (responses)
+        match /responses/{responseId} {
+          // Chỉ Admin được đọc, sửa, xóa
+          allow read, update, delete: if isAdmin();
+
+          // Người trả lời công khai được quyền tạo (create) bài nộp nếu thỏa mãn các điều kiện
+          allow create: if 
+            // a. Khảo sát công khai tồn tại và đang mở ('open')
+            exists(/databases/$(database)/documents/publicSurveys/$(surveyId)) &&
+            get(/databases/$(database)/documents/publicSurveys/$(surveyId)).data.status == 'open' &&
+            get(/databases/$(database)/documents/publicSurveys/$(surveyId)).data.projectId == projectId &&
+            // b. Document chỉ chứa các khóa hợp lệ
+            request.resource.data.keys().hasOnly(['answers', 'surveyVersion', 'submittedAt', 'durationSec', 'meta', 'excluded']) &&
+            // c. Thời gian nộp bằng thời gian server request
+            request.resource.data.submittedAt == request.time &&
+            // d. answers là Map và có số lượng câu trả lời hợp lý (< 200 câu)
+            request.resource.data.answers is map &&
+            request.resource.data.answers.size() < 200 &&
+            // e. durationSec là số không âm
+            request.resource.data.durationSec is number &&
+            request.resource.data.durationSec >= 0;
+        }
+      }
+    }
+
+    // 2. Khảo sát công khai (publicSurveys)
+    match /publicSurveys/{surveyId} {
+      // Bất kỳ ai cũng có thể đọc chi tiết 1 khảo sát (get), nhưng không được liệt kê toàn bộ (list)
+      allow get: if true;
+      allow list: if isAdmin();
+      // Chỉ Admin được xuất bản, sửa, xóa
+      allow write: if isAdmin();
+    }
+  }
+}
